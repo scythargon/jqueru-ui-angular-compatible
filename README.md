@@ -1,0 +1,2 @@
+jqueru-ui-angular-compatible
+============================
