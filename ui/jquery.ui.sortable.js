@@ -28,6 +28,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	widgetEventPrefix: "sort",
 	ready: false,
 	options: {
+        angular_compatible: false,
 		appendTo: "parent",
 		axis: false,
 		connectWith: false,
@@ -486,12 +487,13 @@ $.widget("ui.sortable", $.ui.mouse, {
 				reverting: false,
 				_noFinalSort: null
 			});
-
-			if(this.domPosition.prev) {
-				$(this.domPosition.prev).after(this.currentItem);
-			} else {
-				$(this.domPosition.parent).prepend(this.currentItem);
-			}
+            if(!this.options.angular_compatible){
+                if(this.domPosition.prev) {
+                    $(this.domPosition.prev).after(this.currentItem);
+                } else {
+                    $(this.domPosition.parent).prepend(this.currentItem);
+                }
+            }
 		}
 
 		return this;
@@ -1156,7 +1158,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_clear: function(event, noPropagation) {
-
 		this.reverting = false;
 		// We delay all events that have to be triggered to after the point where the placeholder has been removed and
 		// everything else normalized again
@@ -1165,7 +1166,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		// We first have to update the dom position of the actual currentItem
 		// Note: don't do it if the current item is already removed (by a user), or it gets reappended (see #4088)
-		if(!this._noFinalSort && this.currentItem.parent().length) {
+		if(!this.options.angular_compatible && !this._noFinalSort && this.currentItem.parent().length) {
 			this.placeholder.before(this.currentItem);
 		}
 		this._noFinalSort = null;
